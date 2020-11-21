@@ -17,6 +17,11 @@ import (
 	"unsafe"
 )
 
+const (
+	contentLength = "Content-Length"
+	host          = "Host"
+)
+
 var bodyPool = sync.Pool{
 	New: func() interface{} {
 		return &body{}
@@ -122,10 +127,10 @@ func ReadFastRequest(b *bufio.Reader) (*http.Request, error) {
 			break
 		}
 	}
-	if v, ok := req.Header["Host"]; ok {
+	if v, ok := req.Header[host]; ok {
 		req.Host = v[0]
 	}
-	if v, ok := req.Header["Content-Length"]; ok {
+	if v, ok := req.Header[contentLength]; ok {
 		ContentLength, _ := strconv.ParseInt(v[0], 0, 64)
 		req.ContentLength = ContentLength
 	}
