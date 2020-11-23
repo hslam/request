@@ -172,7 +172,7 @@ func (b *body) Close() error {
 		b.i = 0
 		return nil
 	}
-	io.Copy(ioutil.Discard, b)
+	io.CopyN(ioutil.Discard, b, b.l-b.i)
 	b.i = 0
 	return nil
 }
