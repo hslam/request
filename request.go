@@ -135,6 +135,7 @@ func ReadFastRequest(b *bufio.Reader) (*http.Request, error) {
 		req.ContentLength = ContentLength
 	}
 	body := bodyPool.Get().(*body)
+	body.i = 0
 	body.l = req.ContentLength
 	body.b = b
 	req.Body = body
@@ -169,11 +170,9 @@ func (b *body) Close() error {
 		return nil
 	}
 	if b.i >= b.l {
-		b.i = 0
 		return nil
 	}
 	io.CopyN(ioutil.Discard, b, b.l-b.i)
-	b.i = 0
 	return nil
 }
 
